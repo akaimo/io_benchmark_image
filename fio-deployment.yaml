@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fio-deployment
+  labels:
+    app: fio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fio
+  template:
+    metadata:
+      labels:
+        app: fio
+    spec:
+      containers:
+      - name: fio
+        image: akaimo/io-benchmark
+        command: ["tail"]
+        args: ["-f", "/dev/null"]
+        volumeMounts:
+          - name: src-root
+            mountPath: /iotest/work
+
+      volumes:
+      - name: src-root
+        hostPath:
+          path: /tmp
+          type: Directory
